@@ -13,7 +13,12 @@ fib x = fib (x - 1) + fib (x - 2)
 -- ab 0 mit linearer Laufzeit
 
 fib2    :: Integer -> Integer
-fib2 = undefined
+fib2 n = fibIter n 1 1
+       where fibIter i a sum
+               | i < 2 = sum
+               | otherwise = fibIter (i - 1) sum (sum + a)
+             
+             
 
 -- Definieren Sie eine Funktion c (für Collatz), die berechnet
 -- wie viele Rekursionsschritte benötigt werden, um
