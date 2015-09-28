@@ -14,9 +14,9 @@ fib x = fib (x - 1) + fib (x - 2)
 
 fib2    :: Integer -> Integer
 fib2 n = fibIter n 1 1
-       where fibIter i a sum
-               | i < 2 = sum
-               | otherwise = fibIter (i - 1) sum (sum + a)
+  where fibIter i a sum
+          | i < 2 = sum
+          | otherwise = fibIter (i - 1) sum (sum + a)
              
              
 
@@ -31,14 +31,18 @@ fib2 n = fibIter n 1 1
     
 c       :: Integer -> Integer
 c 1 = 0
-c n = 1 + if even n then c (rem n 2) else c ((n * 3) + 1)
+c n = 1 + if even n then c (div n 2) else c ((n * 3) + 1)
 
 
 -- Definieren Sie ein endrekurive Variante von c
     
 c1      :: Integer -> Integer
-c1 = undefined
-
+c1 n = collatzIter 0 n 
+  where collatzIter i val
+          | val == 1 = i
+          | even val = collatzIter (i + 1) (div val 2)
+          | odd val  = collatzIter (i + 1) (n * 3) + 1
+                       
 -- Definieren Sie eine Funktion cmax, die für ein
 -- Intervall von Zahlen das Maximum der
 -- Collatz-Funktion berechnet. Nutzen Sie die
