@@ -30,14 +30,14 @@ fib2 n = fibIter n 1 1
 -- 1 erhöht.
     
 c       :: Integer -> Integer
-c n = undefined
+c 1 = 0
+c n = 1 + if even n then c (rem n 2) else c ((n * 3) + 1)
 
 
 -- Definieren Sie ein endrekurive Variante von c
     
 c1      :: Integer -> Integer
 c1 = undefined
-
 
 -- Definieren Sie eine Funktion cmax, die für ein
 -- Intervall von Zahlen das Maximum der
