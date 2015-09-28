@@ -4,8 +4,10 @@ where
 -- Definieren Sie eine Funktion fib zur Berechung der Fibonacci-Zahlen
 -- ab 0 
 fib     :: Integer -> Integer
-fib x = undefined
-
+fib 0 = 1
+fib 1 = 1
+fib x = fib (x - 1) + fib (x - 2)
+  
 
 -- Definieren Sie eine Funktion fib zur Berechung der Fibonacci-Zahlen
 -- ab 0 mit linearer Laufzeit
