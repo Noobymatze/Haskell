@@ -49,7 +49,10 @@ c1 n = collatzIter 0 n
 -- vordefinierten Funkt min und max.
 
 cmax    :: Integer -> Integer -> Integer
-cmax lb ub = undefined
+cmax lb ub = cmaxIter (lb + 1) (c lb)
+  where cmaxIter i maximum
+          | i < ub = cmaxIter (i + 1) (max maximum $ c i)
+          | i == ub = max maximum $ c i
 
 
 -- Definieren Sie eine Funktion imax, die für ein
