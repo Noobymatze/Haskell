@@ -80,6 +80,11 @@ cmax1
 -- (mit einer lokalen Hilfsfunktion).
 
 imax2   :: (Integer -> Integer) -> Integer -> Integer -> (Integer, Integer)
-imax2 f lb ub = undefined
+imax2 f lb ub = imax2Iter lb (lb, (f lb))
+  where imax2Iter i (maxi, val)
+          | i == ub = (maxi, val)
+          | i < ub  = let m = f i 
+                      in imax2Iter (i + 1) (if m > val then i else maxi, max m val)
+          | i > ub  = error "lower bound is greater than upper"
 
 -- ----------------------------------------
