@@ -41,7 +41,7 @@ c1 n = collatzIter 0 n
   where collatzIter i val
           | val == 1 = i
           | even val = collatzIter (i + 1) (div val 2)
-          | odd val  = collatzIter (i + 1) (n * 3) + 1
+          | odd val  = collatzIter (i + 1) ((val * 3) + 1)
                        
 -- Definieren Sie eine Funktion cmax, die für ein
 -- Intervall von Zahlen das Maximum der
@@ -49,10 +49,11 @@ c1 n = collatzIter 0 n
 -- vordefinierten Funkt min und max.
 
 cmax    :: Integer -> Integer -> Integer
-cmax lb ub = cmaxIter (lb + 1) (c lb)
+cmax lb ub = cmaxIter lb (c lb)
   where cmaxIter i maximum
-          | i < ub = cmaxIter (i + 1) (max maximum $ c i)
-          | i == ub = max maximum $ c i
+          | i == ub = maximum
+          | i < ub  = cmaxIter (i + 1) (max maximum $ c (i + 1))
+          | i > ub  = error "lower bound is bigger than upper"
 
 
 -- Definieren Sie eine Funktion imax, die für ein
@@ -61,7 +62,11 @@ cmax lb ub = cmaxIter (lb + 1) (c lb)
 -- Sie die obige Funktion cmax so um, dass sie mit imax arbeitet.
 
 imax    :: (Integer -> Integer) -> Integer -> Integer -> Integer
-imax f lb ub = undefined
+imax f lb ub = imaxIter lb (f lb)
+  where imaxIter i maximum
+          | i == ub = maximum
+          | i < ub  = imaxIter (i + 1) (max maximum $ f (i + 1))
+          | i > ub  = error "lower bound is bigger than upper"
 
 
 cmax1   :: Integer -> Integer -> Integer
