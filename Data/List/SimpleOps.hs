@@ -75,7 +75,9 @@ splitAt' i (x : xs) = (x:xs', ys')
 
 -- 1. impl: direct or with map
 intercalate :: [a] -> [[a]] -> [a]
-intercalate xs = concat . map (++xs)
+intercalate _ [] = []
+intercalate _ (x:[]) = x
+intercalate sep (x : xs) = x ++ sep ++ intercalate sep xs
 
 -- 2. impl: with foldr
 -- after chapter about folds
@@ -116,7 +118,8 @@ partition'' = undefined
 
 inits        :: [a] -> [[a]]
 inits [] = []
-inits (x:xs) = map (x:) (inits xs)
+inits (x:[]) = [[], [x]]
+inits (x:xs) = []:map (x:) (inits xs)
 
 -- 2. impl: with foldr
 -- after chapter about folds
@@ -137,10 +140,16 @@ inits' = undefined
 --
 
 join' :: a -> [[a]] -> [a]
-join' = undefined
+join' _ [] = []
+join' _ (x:[]) = x
+join' c (x:xs) = x ++ [c] ++ join' c xs               
 
 --  this one fails with @split 'x' "xx"
 split' :: Eq a => a -> [a] -> [[a]]
-split' = undefined
+split' _ [] = [[]]
+split' sep (x:xs)
+  | sep == x  = []:split' sep xs
+  | otherwise = (x:y):ys
+  where (y:ys) = split' sep xs
     
 -- ----------------------------------------
