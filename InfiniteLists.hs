@@ -51,18 +51,17 @@ hamilton :: [Integer]
 hamilton
   = merges [is2, is3, is5]
     where
-      is2 = [ x | x <- [2..], mod x 2 == 0 ]
-      is3 = [ y | y <- [3..], mod y 3 == 0 ]
-      is5 = [ z | z <- [5..], mod z 5 == 0 ]
+      is2 = map (*2) [0..]
+      is3 = map (*3) [0..]
+      is5 = map (*5) [0..]
 
 merge :: [Integer] -> [Integer] -> [Integer]
-merge [] [] = []
-merge [] _  = []
-merge _  [] = []
+merge [] ys = ys
+merge xs [] = xs
 merge (x:xs) (y:ys)
-  | x < y  = x:y:merge xs ys
-  | x > y  = y:x:merge xs ys
+  | x < y  = x:merge xs (y:ys)
   | x == y = x:merge xs ys
+  | x > y  = y:merge (x:xs) ys
 
 -- | @merges@ takes a list of lists of ascending integers
 -- and merges these lists into a single sorted list without any duplicates
@@ -70,7 +69,7 @@ merge (x:xs) (y:ys)
 
 merges :: [[Integer]] -> [Integer]
 merges [] = []
-merges (ys:xs) = merge ys $ merges xs
+merges (xs:xss) = merge xs $ merges xss
 
 -- | @merges@ with a fold
 
