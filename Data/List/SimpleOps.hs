@@ -34,7 +34,7 @@ nub' (x : xs) = x : nub' [ y | y <- xs, y /= x ]
 -- after chapter about folds
 
 nub'' :: Eq a => [a] -> [a]
-nub'' = undefined
+nub'' = foldr (\x xs -> x : filter (/=x) xs ) []
 
 
 -- ----------------------------------------
