@@ -82,7 +82,9 @@ intercalate sep (x : xs) = x ++ sep ++ intercalate sep xs
 -- 2. impl: with foldr
 -- after chapter about folds
 intercalate' :: [a] -> [[a]] -> [a]
-intercalate' sep = foldr (\x xs -> x ++ sep ++ xs) [] 
+intercalate' sep = foldr f []
+  where f x [] = x
+        f x xs = x ++ sep ++ xs
 
 -- ----------------------------------------
 
@@ -120,8 +122,7 @@ partition'' p = foldr test ([], [])
 -- 1. impl: direct
 
 inits        :: [a] -> [[a]]
-inits [] = []
-inits (x:[]) = [[], [x]]
+inits [] = [[]]
 inits (x:xs) = []:map (x:) (inits xs)
 
 -- 2. impl: with foldr

@@ -11,22 +11,23 @@ type Interval = (Int, Int)
 
 overlap :: Interval -> Interval -> Bool
 overlap (x1, y1) (x2, y2)
-  = undefined
-
+  | x1 > x2   = overlap (x2, y2) (x1, y1)
+  | otherwise = y1 + 1 >= x2
+                        
 
 less :: Interval -> Interval -> Bool
 less (_x1, y1) (x2, _y2)
-  = undefined
+  = y1 < x2
 
                            
 emptyInterval :: Interval -> Bool
 emptyInterval (x, y)
-  = undefined
+  = x > y
 
 
 -- merge 2 (overlapping) intervals
 merge :: Interval -> Interval -> Interval
-merge = undefined
+merge (x1, y1) (x2, y2) = (min x1 x2, max y1 y2)
 
 
 -- ----------------------------------------
@@ -38,7 +39,7 @@ merge = undefined
 type IntervalSet = [Interval]
 
 inv :: IntervalSet -> Bool
-inv = undefined
+inv xs = and $ zipWith less xs (tail xs)
 
 
 -- ----------------------------------------
@@ -50,12 +51,15 @@ singleInterval x y
     | otherwise = []
 
 insertInterval :: Interval -> IntervalSet -> IntervalSet
-insertInterval = undefined
-
+insertInterval x [] = [x]
+insertInterval x (next:xs)
+  | overlap x next = merge x next : xs
+  | less x next = x : next : xs
+  | otherwise = next : insertInterval x xs
+                
 
 fromIntervalList :: [(Int, Int)] -> IntervalSet
-fromIntervalList = undefined
-
+fromIntervalList = foldr insertInterval []
 
 -- ----------------------------------------
 --
@@ -71,19 +75,21 @@ insert :: Int -> IntervalSet -> IntervalSet
 insert i = insertInterval (i, i)
 
 union :: IntervalSet -> IntervalSet -> IntervalSet
-union = undefined
+union = foldr insertInterval
 
 
 member :: Int -> IntervalSet -> Bool
-member = undefined
+member i = or . map isIn
+  where isIn (x, y) = x < i && i < y
 
          
 fromList :: [Int] -> IntervalSet
-fromList = undefined
+fromList = foldr insert empty
 
 
 toList :: IntervalSet -> [Int]
-toList = undefined
+toList = concat . map (uncurry upto)
+  where upto x y = [x..y]
 
 
 -- ----------------------------------------
