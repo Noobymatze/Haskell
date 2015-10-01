@@ -15,10 +15,10 @@ toList          :: List a -> [a]
 toList l        = l []
 
 empty           :: List a
-empty           = (\_ -> [])
+empty           = P.id
 
 singleton       :: a -> List a
-singleton      = (:)
+singleton      = fromList . (:[])
 
 -- (:) for functional lists
 cons            :: a -> List a -> List a
@@ -38,24 +38,25 @@ concat          = P.foldr append empty
 
 -- like map for normal lists: foldr ((:) . f) []
 map             :: (a -> b) -> List a -> List b
+--map f l         = (\xs -> xs ++ P.map f (toList l))
 map f           = (++) . P.map f . toList
 
 -- foldr with foldr for normal lists
 foldr           :: (a -> b -> b) -> b -> List a -> b
-foldr op n      = undefined
+foldr op n      = P.foldr op n . toList
 
 -- head, tail, null
 head            :: List a -> a
-head            = undefined
+head            = P.head . toList
 
 tail            :: List a -> List a
-tail            = undefined
+tail l           = P.tail . l
 
 null            :: List a -> Bool
-null            = undefined
+null            = P.null . toList
 
 reverse         :: List a -> List a
-reverse         = undefined
+reverse l       = P.reverse . l
                   
 
 -- ----------------------------------------
