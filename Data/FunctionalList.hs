@@ -22,23 +22,23 @@ singleton      = (:)
 
 -- (:) for functional lists
 cons            :: a -> List a -> List a
-cons e l        = (\xs -> e : l xs)
+cons e l        = (e:) . l
 
 -- dual to cons
 snoc            :: List a -> a -> List a
-snoc l e        = undefined
+snoc l e        = (++[e]) . l
 
 -- (++) for functional lists
 append          :: List a -> List a -> List a
-append l1 l2    = undefined
+append          = (.)
 
 -- like concat for normal lists: foldr (++) []
 concat          :: [List a] -> List a
-concat          = undefined
+concat          = P.foldr append empty
 
 -- like map for normal lists: foldr ((:) . f) []
 map             :: (a -> b) -> List a -> List b
-map f           = undefined
+map f           = (++) . P.map f . toList
 
 -- foldr with foldr for normal lists
 foldr           :: (a -> b -> b) -> b -> List a -> b
@@ -56,5 +56,6 @@ null            = undefined
 
 reverse         :: List a -> List a
 reverse         = undefined
+                  
 
 -- ----------------------------------------
