@@ -22,7 +22,7 @@ singleton      = (:)
 
 -- (:) for functional lists
 cons            :: a -> List a -> List a
-cons e l        =  
+cons e l        = (\xs -> e : l xs)
 
 -- dual to cons
 snoc            :: List a -> a -> List a
