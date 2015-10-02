@@ -54,12 +54,14 @@ instance MonadPlus Tree where
   mplus = undefined
 
 instance Monoid (Tree a) where
-  mempty  = undefined
-  mappend = undefined
+  mempty  = Null
+  mappend = bin
 
 -- fold elements like in a list from right to left
 instance Foldable Tree where
-  foldr f e t = undefined
+  foldr _ e Null = e
+  foldr f e (Tip a) = f a e
+  foldr f e (Bin l r) = foldr f (foldr f e r) l
 
 -- ----------------------------------------
 -- classical visitor
@@ -67,7 +69,9 @@ instance Foldable Tree where
 visitTree :: b -> (a -> b) -> (b -> b -> b) -> Tree a -> b
 visitTree e tf bf = visit'
   where
-    visit' = undefined
+    visit' Null = e
+    visit' (Tip a) = tf a
+    visit' (Bin l r) = bf (visit' l) (visit' r)
 
 -- special visitors
 sizeTree' :: Tree a -> Int
@@ -76,11 +80,11 @@ sizeTree' (Tip _) = 1
 sizeTree' (Bin l r) = sizeTree' l + sizeTree' r
 
 sizeTree :: Tree a -> Int
-sizeTree = visitTree undefined undefined undefined
+sizeTree = visitTree 0 (const 1) (+)
 
 minDepth, maxDepth :: Tree a -> Int
-minDepth = visitTree undefined undefined undefined
-maxDepth = visitTree undefined undefined undefined
+minDepth = visitTree 0 (const 1) (\l r -> 1 + min l r)
+maxDepth = visitTree 0 (const 1) (\l r -> 1 + max l r)
 
 -- ----------------------------------------
 -- access functions
@@ -114,11 +118,11 @@ init = maybe (error "init: empty tree") fst . viewR
 
 -- | runs in O(n) due to the use of (:)
 toList :: Tree a -> [a]
-toList = foldr undefined undefined
+toList = foldr (:) []
 
 -- | runs in O(n^2) due to the use of (++)
 toListSlow :: Tree a -> [a]
-toListSlow = visitTree undefined undefined undefined
+toListSlow = visitTree [] (:[]) (++)
 
 -- | build a balanced tree
 --
@@ -126,11 +130,15 @@ toListSlow = visitTree undefined undefined undefined
 
 -- weak balancing criterion
 fromList :: [a] -> Tree a
+--fromList [] = []
 fromList = undefined
 
 -- strong balancing criterion
 fromList' :: [a] -> Tree a
-fromList' = undefined
+fromList' [] = Null
+fromList' [x] = Tip x
+fromList' xs = bin (fromList' x) (fromList' y)
+  where (x, y) = splitAt (div (length xs) 2) xs
 
 -- list to the right
 fromList'' :: [a] -> Tree a
