@@ -26,7 +26,10 @@ truthTable n = map (True:) t' ++ map (False:) t'
 
 proof' :: Expr -> Maybe VarEnv
 proof' e
-  = undefined
+  = map (\row -> ) $ truthTable $ length vars
+  where
+    vars = freeVars e
+    
 
 
 proof :: Expr -> String
