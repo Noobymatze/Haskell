@@ -32,22 +32,19 @@ type Counters
       (Sum Int,            -- char count
        ())))
 
-zeros :: Counters
-zeros = (Sum 0, (Sum 0, (Sum 0, ()))) 
-
 -- --------------------
 --
 -- the whole computation
 
 processText :: T.Text -> Counters
 processText t
-  = foldr (mappend . toCounters) zeros . T.lines $ t
+  = foldr (mappend . toCounters) mempty . T.lines $ t
 
 -- process a single line
 toCounters :: T.Text -> Counters
-toCounters text = (Sum 1,
-                   (Sum . length . T.words $ text,
-                    (Sum . T.length $ text,
+toCounters line = (Sum 1,
+                   (Sum . length . T.words $ line,
+                    (Sum . T.length $ line,
                      ())))
 
 -- --------------------
