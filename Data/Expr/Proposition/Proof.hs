@@ -26,11 +26,14 @@ truthTable n = map (True:) t' ++ map (False:) t'
 
 proof' :: Expr -> Maybe VarEnv
 proof' e
-  = map (\row -> ) $ truthTable $ length vars
+  = (listToMaybe . foldr evalEnv []) envs
   where
-    vars = freeVars e
-    
-
+    varNames  = freeVars e
+    fullTable = map (map Lit) $ truthTable $ length varNames
+    envs      = map (zip varNames) fullTable
+    evalEnv env falseEnvs
+      | eval $ substVars env e = falseEnvs
+      | otherwise = env:falseEnvs
 
 proof :: Expr -> String
 proof e

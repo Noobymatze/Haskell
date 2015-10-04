@@ -44,5 +44,4 @@ tt0, tt1, tt2 :: String
 tt0 = pretty propModusPonens
 tt1 = pretty $ toExpr "x && y || z"
 tt2 = pretty $ toExpr "x x x"
-
 -- ----------------------------------------
