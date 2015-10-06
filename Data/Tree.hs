@@ -42,7 +42,7 @@ instance Applicative Tree where
   (<*>) = undefined
   
 instance Monad Tree where
-  return     = undefined
+  return     = Tip
   _    >>= _ = undefined
 
 instance Alternative Tree where

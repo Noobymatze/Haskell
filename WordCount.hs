@@ -19,6 +19,7 @@ import qualified Data.Text          as T
 import qualified Data.Text.IO       as T
 
 import           System.Environment (getArgs)
+import Data.Char
 
 -- ----------------------------------------
 --
@@ -73,7 +74,7 @@ singleFC w = FC (M.singleton w 1)
 
 processText :: T.Text -> Counters
 processText t
-  = foldr (mappend . toCounters) mempty . T.lines $ t
+  = mconcat . map toCounters . T.lines $ t
 
 -- process a single line
 toCounters :: T.Text -> Counters
@@ -83,13 +84,13 @@ toCounters
      (Sum $ length wordsInLine,              -- word count
       (Sum charCount,                        -- char count
        (Max charCount,                       -- length longest line
-        (Sum . T.count (T.pack " ") $ line,  -- whitespace count
-         (FC frequencies,                    -- word frequency
+        (Sum . T.length . T.filter isSpace $ line,  -- whitespace count
+         (frequencies,                    -- word frequency
           ()))))))
     where
       wordsInLine = T.words line
       charCount = T.length $ line
-      frequencies = foldr (\w -> M.insertWith (+) w 1) M.empty wordsInLine
+      frequencies = mconcat . map singleFC $ wordsInLine
 
 -- --------------------
 --

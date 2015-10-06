@@ -38,7 +38,7 @@ type Counters
 
 processText :: T.Text -> Counters
 processText t
-  = foldr (mappend . toCounters) mempty . T.lines $ t
+  = mconcat . map toCounters . T.lines $ t
 
 -- process a single line
 toCounters :: T.Text -> Counters

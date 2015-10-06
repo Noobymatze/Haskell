@@ -7,7 +7,7 @@ import qualified Data.Expr.ArithmLogic.EvalMonad             as M
 import qualified Data.Expr.ArithmLogic.EvalErrorMonad        as E
 
 -- {-
---import qualified Data.Expr.ArithmLogic.EvalReaderErrorMonad  as R
+import qualified Data.Expr.ArithmLogic.EvalReaderErrorMonad  as R
 --import qualified Data.Expr.ArithmLogic.EvalReaderErrorTrans  as RT
 --import qualified Data.Expr.ArithmLogic.EvalListErrorMonad    as L
 --import qualified Data.Expr.ArithmLogic.Check                 as C
