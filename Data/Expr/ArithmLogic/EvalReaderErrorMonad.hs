@@ -86,19 +86,18 @@ instance Applicative Result where
   (<*>) = ap
 
 instance Monad Result where
-  return a = RR $ \_ -> return a
-  (>>=) m k = RR $ \env -> do v <- (unRR m) env
-                              unRR (k v) env
+  return = undefined
+  (>>=)  = undefined
   
 instance MonadError EvalError Result where
   throwError e
-    = RR $ \_ -> throwError e
+    = undefined
   catchError (RR ef) handler
     = undefined
 
 instance MonadReader Env Result where
-  ask             = RR $ return
-  local f (RR ef) = RR $ ef . f
+  ask             = undefined
+  local f (RR ef) = undefined
 
 -- ----------------------------------------
 -- error handling
@@ -139,9 +138,7 @@ eval' e = (unRR . eval) e M.empty -- start with an empty environment
 eval :: Expr -> Result Value
 eval (BLit b)          = return (B b)
 eval (ILit i)          = return (I i)
-eval (Var    x)        = do v <- asks $ M.lookup x
-                            maybe (freeVar x) return v
-                            
+eval (Var    x)        = undefined
 eval (Unary  op e1)    = do v1  <- eval e1
                             mf1 op v1
 
@@ -154,8 +151,7 @@ eval (Cond   c e1 e2)  = do b <- evalBool c
                               then eval e1
                               else eval e2
 
-eval (Let x e1 e2)     = do v <- eval e1
-                            local (M.insert x v) (eval e2)
+eval (Let x e1 e2)     = undefined
 
 evalBool :: Expr -> Result Bool
 evalBool e
@@ -238,5 +234,3 @@ divIII _  v1      v2
   | otherwise           = intExpected v2
 
 -- ----------------------------------------
-
-"let y = 1 + 1 in y * y
