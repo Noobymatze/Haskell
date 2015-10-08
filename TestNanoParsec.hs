@@ -56,7 +56,7 @@ eval ex = case ex of
 
 -- parse an integer literal
 int :: Parser Expr
-int = (Lit . read) <$> number -- Or number >>= return . Lit . read
+int = number >>= return . Lit . read
 
 expr :: Parser Expr
 expr = chainl1 term addop

@@ -38,20 +38,25 @@ instance Functor Tree where
   fmap f (Bin l r) = Bin (fmap f l) (fmap f r)
 
 instance Applicative Tree where
-  pure  = undefined
-  (<*>) = undefined
+  pure  = return
+  (<*>) Null _ = Null
+  (<*>) (Tip f) t = fmap f t
+  (<*>) (Bin l r) t = Bin (l <*> t) (r <*> t)
+  
   
 instance Monad Tree where
-  return     = Tip
-  _    >>= _ = undefined
+  return          = Tip
+  Null >>= _      = Null
+  (Tip a) >>= f   = f a
+  (Bin l r) >>= f = Bin (l >>= f) (r >>= f)
 
 instance Alternative Tree where
   empty = mzero   -- or Null
   (<|>) = mplus
 
 instance MonadPlus Tree where
-  mzero = undefined
-  mplus = undefined
+  mzero = Null
+  mplus = bin
 
 instance Monoid (Tree a) where
   mempty  = Null
